@@ -1,0 +1,12 @@
+.counter {
+    width: 50px;
+    text-align: center;
+}
+
+.button {
+    height: 40px;
+}
+
+.min-w-full {
+    min-width: 75% !important;
+}

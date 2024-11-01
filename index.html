@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macro | Los LOBOS FC</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="flex space-x-6 max-w-6xl w-full px-4">
+        <div class="flex flex-row space-x-6 w-full">
+            <!-- Columna de Estadísticas del Equipo -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                <input type="text" value="Mi Equipo"
+                    class="text-xl font-bold mb-4 ml-14 text-center border-b-2 border-gray-300 focus:outline-none"
+                    id="header-equipo">
+                <table class="w-full border border-gray-300 mb-6" id="tabla2">
+                    <thead>
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2 bg-gray-200">Acción</th>
+                            <th class="border border-gray-300 px-4 py-2 bg-gray-200">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Remates</td>
+                            <td class="border border-gray-300 px-4 py-2" id="remates-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Remates al arco</td>
+                            <td class="border border-gray-300 px-4 py-2" id="remates-al-arco-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Remates totales</td>
+                            <td class="border border-gray-300 px-4 py-2" id="remates-full-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Posesión</td>
+                            <td class="border border-gray-300 px-4 py-2" id="posesion-total">0%</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Pases</td>
+                            <td class="border border-gray-300 px-4 py-2" id="pases-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Pase correcto</td>
+                            <td class="border border-gray-300 px-4 py-2" id="pases-correcto-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Pase errado</td>
+                            <td class="border border-gray-300 px-4 py-2" id="pases-errados-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Precisión de los pases</td>
+                            <td class="border border-gray-300 px-4 py-2" id="precision-pases-total">0%</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Faltas</td>
+                            <td class="border border-gray-300 px-4 py-2" id="faltas-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Tarjetas Amarillas</td>
+                            <td class="border border-gray-300 px-4 py-2" id="tarjetas-amarillas-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Tarjetas Rojas</td>
+                            <td class="border border-gray-300 px-4 py-2" id="tarjetas-rojas-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Offside</td>
+                            <td class="border border-gray-300 px-4 py-2" id="posicion-adelantada-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Corners</td>
+                            <td class="border border-gray-300 px-4 py-2" id="tiros-esquina-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Atajadas</td>
+                            <td class="border border-gray-300 px-4 py-2" id="atajadas-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Centros</td>
+                            <td class="border border-gray-300 px-4 py-2" id="centros-total">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-minus" onclick="decrement('remates', true)" style="cursor: pointer;"></i>
+                        <span>Remates</span>
+                        <i class="fas fa-plus" onclick="increment('remates', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-minus" onclick="decrement('remates-al-arco', true)"
+                            style="cursor: pointer;"></i>
+                        <span>Remates al arco</span>
+                        <i class="fas fa-plus" onclick="increment('remates-al-arco', true)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-minus" onclick="decrement('remates-full', true)" style="cursor: pointer;"></i>
+                        <span>Remates totales</span>
+                        <i class="fas fa-plus" onclick="increment('remates-full', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button
+                        class="bg-indigo-500 text-white px-4 py-2 rounded flex items-center space-x-2 hover:bg-indigo-600">
+                        <i class="fas fa-minus" onclick="decrement('posesion', true)" style="cursor: pointer;"></i>
+                        <span>Posesión</span>
+                        <i class="fas fa-plus" onclick="increment('posesion', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">
+                        <i class="fas fa-minus" onclick="decrement('pases', true)" style="cursor: pointer;"></i>
+                        <span>Pases</span>
+                        <i class="fas fa-plus" onclick="increment('pases', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">
+                        <i class="fas fa-minus" onclick="decrement('pases-correcto', true)"
+                            style="cursor: pointer;"></i>
+                        <span>Pase correcto</span>
+                        <i class="fas fa-plus" onclick="increment('pases-correcto', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">
+                        <i class="fas fa-minus" onclick="decrement('pases-errados', true)" style="cursor: pointer;"></i>
+                        <span>Pase errados</span>
+                        <i class="fas fa-plus" onclick="increment('pases-errados', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-purple-500 text-white px-4 py-2 rounded shadow hover:bg-purple-600">
+                        <i class="fas fa-minus" onclick="decrement('precision-pases', true)"
+                            style="cursor: pointer;"></i>
+                        <span>Precisión de pases</span>
+                        <i class="fas fa-plus" onclick="increment('precision-pases', true)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600">
+                        <i class="fas fa-minus" onclick="decrement('faltas', true)" style="cursor: pointer;"></i>
+                        <span>Faltas</span>
+                        <i class="fas fa-plus" onclick="increment('faltas', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-60">
+                        <i class="fas fa-minus" onclick="decrement('tarjetas-amarillas', true)"
+                            style="cursor: pointer;"></i>
+                        <span>Tarjeta Amarilla</span>
+                        <i class="fas fa-plus" onclick="increment('tarjetas-amarillas', true)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-red-700 text-white px-4 py-2 rounded shadow hover:bg-red-800">
+                        <i class="fas fa-minus" onclick="decrement('tarjetas-rojas', true)"
+                            style="cursor: pointer;"></i>
+                        <span>Tarjeta Roja</span>
+                        <i class="fas fa-plus" onclick="increment('tarjetas-rojas', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-minus" onclick="decrement('posicion-adelantada', true)"
+                            style="cursor: pointer;"></i>
+                        <span>Offside</span>
+                        <i class="fas fa-plus" onclick="increment('posicion-adelantada', true)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-pink-500 text-white px-4 py-2 rounded shadow hover:bg-pink-600">
+                        <i class="fas fa-minus" onclick="decrement('tiros-esquina', true)" style="cursor: pointer;"></i>
+                        <span>Corners</span>
+                        <i class="fas fa-plus" onclick="increment('tiros-esquina', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-pink-500 text-white px-4 py-2 rounded shadow hover:bg-pink-600">
+                        <i class="fas fa-minus" onclick="decrement('atajadas', true)" style="cursor: pointer;"></i>
+                        <span>Atajadas</span>
+                        <i class="fas fa-plus" onclick="increment('atajadas', true)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-pink-500 text-white px-4 py-2 rounded shadow hover:bg-pink-600">
+                        <i class="fas fa-minus" onclick="decrement('centros', true)" style="cursor: pointer;"></i>
+                        <span>Centros</span>
+                        <i class="fas fa-plus" onclick="increment('centros', true)" style="cursor: pointer;"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Controles principales -->
+            <div class="flex flex-col items-center gap-4 justify-center">
+                <span id="contadorTiempo1" class="text-2xl font-bold">00:00</span>
+                <button class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition mb-2"
+                    id="btnTiempo1">Mi Equipo</button>
+                <span id="contadorTiempo2" class="text-2xl font-bold">00:00</span>
+                <button class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition"
+                    id="btnTiempo2">Equipo Rival</button>
+
+                <!-- Botones adicionales -->
+                <button id="btnPausar"
+                    class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition">Pausar
+                    Ambos Tiempos</button>
+                <button id="btnResetear"
+                    class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition">Reiniciar
+                    Tiempos</button>
+                <button id="btnExportar"
+                    class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition mt-4">Exportar
+                    mi Equipo</button>
+                <button id="btnExportarRival"
+                    class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition">Export equipo
+                    Rival</button>
+                <button id="btnResetDefault"
+                    class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition">Resetear a
+                    Predeterminado
+                    (NO TOCAR)</button>
+            </div>
+            <!-- Columna de Estadísticas del Rival -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                <input type="text" value="Equipo Rival"
+                    class="text-xl font-bold mb-4 ml-14 text-center border-b-2 border-gray-300 focus:outline-none"
+                    id="header-rival">
+                <table class="w-full border border-gray-300 mb-6" id="tabla1">
+                    <thead>
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2 bg-gray-200">Acción</th>
+                            <th class="border border-gray-300 px-4 py-2 bg-gray-200">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Remates</td>
+                            <td class="border border-gray-300 px-4 py-2" id="remates-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Remates al arco</td>
+                            <td class="border border-gray-300 px-4 py-2" id="remates-arco-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Remates totales</td>
+                            <td class="border border-gray-300 px-4 py-2" id="remates-rival-full-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Posesión</td>
+                            <td class="border border-gray-300 px-4 py-2" id="posesion-rival-total">0%</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Pases</td>
+                            <td class="border border-gray-300 px-4 py-2" id="pases-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Pase correcto</td>
+                            <td class="border border-gray-300 px-4 py-2" id="pases-correcto-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Pase errado</td>
+                            <td class="border border-gray-300 px-4 py-2" id="pases-errados-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Precisión de los pases</td>
+                            <td class="border border-gray-300 px-4 py-2" id="precision-pases-rival-total">0%</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Faltas</td>
+                            <td class="border border-gray-300 px-4 py-2" id="faltas-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Tarjetas Amarillas</td>
+                            <td class="border border-gray-300 px-4 py-2" id="tarjetas-amarillas-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Tarjetas Rojas</td>
+                            <td class="border border-gray-300 px-4 py-2" id="tarjetas-rojas-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Offside</td>
+                            <td class="border border-gray-300 px-4 py-2" id="posicion-adelantada-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Corners</td>
+                            <td class="border border-gray-300 px-4 py-2" id="tiros-esquina-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Atajadas</td>
+                            <td class="border border-gray-300 px-4 py-2" id="atajadas-rival-total">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">Centros</td>
+                            <td class="border border-gray-300 px-4 py-2" id="centros-rival-total">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-minus" onclick="decrement('remates-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Remates</span>
+                        <i class="fas fa-plus" onclick="increment('remates-rival', false)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-minus" onclick="decrement('remates-arco-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Remates al arco</span>
+                        <i class="fas fa-plus" onclick="increment('remates-arco-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-minus" onclick="decrement('remates-rival-full', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Remates totales</span>
+                        <i class="fas fa-plus" onclick="increment('remates-rival-full', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button
+                        class="bg-indigo-500 text-white px-4 py-2 rounded flex items-center space-x-2 hover:bg-indigo-600">
+                        <i class="fas fa-minus" onclick="decrement('posesion-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Posesión</span>
+                        <i class="fas fa-plus" onclick="increment('posesion-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">
+                        <i class="fas fa-minus" onclick="decrement('pases-rival', false)" style="cursor: pointer;"></i>
+                        <span>Pases</span>
+                        <i class="fas fa-plus" onclick="increment('pases-rival', false)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">
+                        <i class="fas fa-minus" onclick="decrement('pases-correcto-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Pase correcto</span>
+                        <i class="fas fa-plus" onclick="increment('pases-correcto-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">
+                        <i class="fas fa-minus" onclick="decrement('pases-errados-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Pase errado</span>
+                        <i class="fas fa-plus" onclick="increment('pases-errados-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-purple-500 text-white px-4 py-2 rounded shadow hover:bg-purple-600">
+                        <i class="fas fa-minus" onclick="decrement('precision-pases-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Precisión de pases</span>
+                        <i class="fas fa-plus" onclick="increment('precision-pases-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600">
+                        <i class="fas fa-minus" onclick="decrement('faltas-rival', false)" style="cursor: pointer;"></i>
+                        <span>Faltas</span>
+                        <i class="fas fa-plus" onclick="increment('faltas-rival', false)" style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-60">
+                        <i class="fas fa-minus" onclick="decrement('tarjetas-amarillas-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Tarjeta Amarilla</span>
+                        <i class="fas fa-plus" onclick="increment('tarjetas-amarillas-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-red-700 text-white px-4 py-2 rounded shadow hover:bg-red-800">
+                        <i class="fas fa-minus" onclick="decrement('tarjetas-rojas-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Tarjeta Roja</span>
+                        <i class="fas fa-plus" onclick="increment('tarjetas-rojas-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+                        <i class="fas fa-minus" onclick="decrement('posicion-adelantada-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Offside</span>
+                        <i class="fas fa-plus" onclick="increment('posicion-adelantada-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-pink-500 text-white px-4 py-2 rounded shadow hover:bg-pink-600">
+                        <i class="fas fa-minus" onclick="decrement('tiros-esquina-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Corners</span>
+                        <i class="fas fa-plus" onclick="increment('tiros-esquina-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-pink-500 text-white px-4 py-2 rounded shadow hover:bg-pink-600">
+                        <i class="fas fa-minus" onclick="decrement('atajadas-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Atajadas</span>
+                        <i class="fas fa-plus" onclick="increment('atajadas-rival', false)"
+                            style="cursor: pointer;"></i>
+                    </button>
+                    <button class="bg-pink-500 text-white px-4 py-2 rounded shadow hover:bg-pink-600">
+                        <i class="fas fa-minus" onclick="decrement('centros-rival', false)"
+                            style="cursor: pointer;"></i>
+                        <span>Centros</span>
+                        <i class="fas fa-plus" onclick="increment('centros-rival', false)" style="cursor: pointer;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
